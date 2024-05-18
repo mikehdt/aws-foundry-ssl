@@ -22,7 +22,10 @@
 						"FullyQualifiedDomainName",
 						"SubdomainName",
 						"WebServerBool",
-						"ConfigureRoute53Bool"
+						"ConfigureRoute53Bool",
+						"DomainRegistrar",
+						"APIKey",
+						"APISecret"
 					]
 				},
 				{
@@ -209,6 +212,22 @@
 				"Daily",
 				"Weekly"
 			]
+		},
+		"APIKey": {
+			"Description": "API Key from your domain registrar. If you are using Namecheap this will just be the same value you entered for FullyQualifiedDomainName.",
+			"Type": "String"
+		},
+		"APISecret": {
+			"Description": "API Secret associated with the API Key above.",
+			"Type": "String"
+		},
+		"DomainRegistrar": {
+			"Description": "The domain registrar from which the domain was purchased from.",
+			"Type": "String",
+			"AllowedValues": [
+				"namecheap",
+				"amazon"
+			]
 		}
 	},
 	"Conditions": {
@@ -255,9 +274,9 @@
 		"ConfigureRoute53": {
 			"Fn::Equals": [
 				{
-					"Ref": "ConfigureRoute53Bool"
+					"Ref": "DomainRegistrar"
 				},
-				"True"
+				"amazon"
 			]
 		},
 		"Route53WebServer": {
@@ -666,7 +685,21 @@
 											{
 												"Ref": "UseLetsEncryptTLS"
 											},
-											"\n"
+											"\n",
+											"domain_registrar=",
+											{
+												"Ref": "DomainRegistrar"
+											},
+											"\n",
+											"api_key=",
+											{
+												"Ref": "APIKey"
+											},
+											"\n",
+											"api_secret=",
+											{
+												"Ref": "APISecret"
+											}
 										]
 									]
 								},
@@ -731,7 +764,7 @@
 								"command": "sudo dnf install -y git"
 							},
 							"B_Clone_Repo": {
-								"command": "sudo git clone https://github.com/mikehdt/aws-foundry-ssl.git",
+								"command": "sudo git clone https://github.com/VoxelrSam/aws-foundry-ssl.git",
 								"cwd": "/"
 							},
 							"C_Start_Install": {

@@ -26,19 +26,30 @@ source /aws-foundry-ssl/setup/nginx.sh
 # Amazon Cloudwatch logs, zone updates and kernel patching
 echo "===== 4. INSTALLING AWS SERVICES AND LINUX KERNEL PATCHING ====="
 source /aws-foundry-ssl/setup/aws_cloudwatch_config.sh
-source /aws-foundry-ssl/setup/aws_hosted_zone_ip.sh
 source /aws-foundry-ssl/setup/aws_linux_updates.sh
 
+# Set up DNS information
+echo "===== 5. CONFIGURING DNS SETTINGS ====="
+case ${domain_registrar} in
+    amazon)
+        sleep 20s	# idk why this is here, but sure
+        source /aws-foundry-ssl/setup/aws_hosted_zone_ip.sh
+        ;;
+    namecheap)
+        source /aws-foundry-ssl/setup/namecheap/record_set.sh
+        ;;
+esac
+
 # Set up TLS certificates with LetsEncrypt
-echo "===== 5. INSTALLING LETSENCRYPT CERTBOT ====="
+echo "===== 6. INSTALLING LETSENCRYPT CERTBOT ====="
 source /aws-foundry-ssl/setup/certbot.sh
 
 # Restart Foundry so aws-s3.json is fully loaded
-echo "===== 6. RESTARTING FOUNDRY ====="
+echo "===== 7. RESTARTING FOUNDRY ====="
 sudo systemctl restart foundry
 
 # Clean up install files (Comment out during testing)
-echo "===== 7. CLEANUP AND USER PERMISSIONS ====="
+echo "===== 8. CLEANUP AND USER PERMISSIONS ====="
 sudo usermod -a -G foundry ec2-user
 sudo chown ec2-user -R /aws-foundry-ssl
 

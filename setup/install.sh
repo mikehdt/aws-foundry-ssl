@@ -14,6 +14,9 @@ curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
 dnf install -y nodejs
 sudo dnf install -y openssl-devel
 sudo dnf install -y amazon-cloudwatch-agent
+curl -O https://bootstrap.pypa.io/get-pip.py
+python3 get-pip.py --user
+pip install gdown
 
 # Install foundry
 echo "===== 2. INSTALLING FOUNDRY ====="

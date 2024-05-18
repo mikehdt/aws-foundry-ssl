@@ -20,10 +20,8 @@ if [[ `echo ${foundry_download_link} | cut -d '/' -f3` == 'drive.google.com' ]];
     while (( fs_retry < 4 )); do
         echo "Attempt $fs_retry..."
 
-        sudo wget --quiet --save-cookies cookies.txt --keep-session-cookies --no-check-certificate "https://docs.google.com/uc?export=download&id=${file_id}" -O- | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1\n/p' > confirm.txt
-
-        sudo wget --load-cookies cookies.txt -O foundry.zip 'https://docs.google.com/uc?export=download&id='${file_id}'&confirm='$(<confirm.txt) && rm -rf cookies.txt confirm.txt
-
+        gdown ${file_id} && mv ./* ./foundry.zip
+		
         # Check if the file looks like it downloaded correctly (not a 404 page etc.)
         filesize=$(stat -c%s "./foundry.zip")
 

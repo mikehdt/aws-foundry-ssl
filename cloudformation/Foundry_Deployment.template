@@ -155,7 +155,8 @@
 			"Description": "Managed AMI (operating system) image for the EC2. If you're using a `g` class instance, leave it as 'arm64'. `a` class instances MUST change this to `x86_64`.",
 			"AllowedValues": [
 				"/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-arm64",
-				"/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64"
+				"/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64",
+				"/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 			],
 			"Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 		},

@@ -12,7 +12,9 @@ rm -rf ./* # Just in case we are running this a second time
 
 rough_filesize=100000000
 
-if [[ `echo ${foundry_download_link} | cut -d '/' -f3` == 'drive.google.com' ]]; then
+if [[ `echo ${foundry_download_link} | cut -d ':' -f1` == 's3' ]]; then
+    aws s3 cp ${foundry_download_link} ./foundry.zip
+elif [[ `echo ${foundry_download_link} | cut -d '/' -f3` == 'drive.google.com' ]]; then
     # Google Drive link
     echo ">>> Downloading Foundry from a Google Drive link"
 

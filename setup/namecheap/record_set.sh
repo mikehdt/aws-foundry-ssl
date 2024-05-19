@@ -4,11 +4,13 @@ source /foundryssl/variables.sh
 sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 sudo yum install -y ddclient
 
+base_dir="/aws-foundry-ssl/setup/namecheap"
+
 if [[ ${webserver_bool} == "True" ]]
 then
-    client_conf="./ddclient_webserver.conf"
+    client_conf="${base_dir}/ddclient_webserver.conf"
 else
-    client_conf="./ddclient.conf"
+    client_conf="${base_dir}/ddclient.conf"
 fi
 
 sudo sed -i "s/api_secret/${api_secret}/g" ${client_conf}

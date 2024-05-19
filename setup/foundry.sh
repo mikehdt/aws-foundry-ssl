@@ -8,6 +8,7 @@ sudo mkdir -p /foundrycron /var/log/foundrycron /home/foundry/foundry-install /f
 
 # Download Foundry from Patreon link or Google Drive
 cd /home/foundry/foundry-install
+rm -rf ./* # Just in case we are running this a second time
 
 rough_filesize=100000000
 

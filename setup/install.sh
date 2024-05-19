@@ -58,7 +58,7 @@ sudo chown ec2-user -R /aws-foundry-ssl
 
 sudo chmod 744 /aws-foundry-ssl/utils/*.sh
 sudo chmod 700 /tmp/foundry-setup.log
-sudo rm /foundryssl/variables_tmp.sh
+#sudo rm /foundryssl/variables_tmp.sh
 
 # Uncomment only if you really care to:
 # sudo rm -r /aws-foundry-ssl

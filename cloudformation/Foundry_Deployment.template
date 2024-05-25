@@ -762,7 +762,7 @@
 						},
 						"commands": {
 							"A_Install_Git": {
-								"command": "sudo yum install git -y"
+								"command": "sudo yum install git"
 							},
 							"B_Clone_Repo": {
 								"command": "sudo git clone https://github.com/VoxelrSam/aws-foundry-ssl.git",

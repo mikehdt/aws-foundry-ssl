@@ -6,10 +6,10 @@
 
 # https://docs.aws.amazon.com/linux/al2023/ug/live-patching.html
 
-#sudo yum install -y kpatch-dnf
-sudo yum kernel-livepatch -y auto
+sudo dnf install -y kpatch-dnf
+sudo dnf kernel-livepatch -y auto
 
-sudo yum install -y kpatch-runtime
-sudo yum update kpatch-runtime
+sudo dnf install -y kpatch-runtime
+sudo dnf update kpatch-runtime
 
 sudo systemctl enable --now kpatch.service

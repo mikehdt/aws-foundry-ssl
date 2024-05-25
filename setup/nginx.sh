@@ -11,7 +11,7 @@ else
 fi
 
 # Install nginx
-sudo yum install nginx
+sudo dnf install nginx -y
 
 # Configure nginx
 sudo mkdir /var/log/nginx/foundry

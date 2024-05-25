@@ -10,7 +10,7 @@
 source /foundryssl/variables.sh
 
 # Install augeas
-sudo yum install -y augeas-libs
+sudo dnf install -y augeas-libs
 
 # Setup and install python env for certbot and then certbot
 sudo python3 -m venv /opt/certbot/

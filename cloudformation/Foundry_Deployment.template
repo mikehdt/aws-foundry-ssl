@@ -764,7 +764,7 @@
 								"command": "sudo dnf install -y git"
 							},
 							"B_Clone_Repo": {
-								"command": "sudo git clone https://github.com/VoxelrSam/aws-foundry-ssl.git",
+								"command": "sudo git clone https://github.com/VoxelrSam/aws-foundry-ssl.git && git switch AL2023",
 								"cwd": "/"
 							},
 							"C_Start_Install": {

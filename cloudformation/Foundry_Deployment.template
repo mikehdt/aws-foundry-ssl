@@ -157,7 +157,7 @@
 				"/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-arm64",
 				"/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-x86_64"
 			],
-			"Default": "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+			"Default": "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-arm64"
 		},
 		"UseFixedIP": {
 			"Type": "String",

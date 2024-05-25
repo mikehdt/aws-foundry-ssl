@@ -1,8 +1,8 @@
 #!/bin/bash
 
 source /foundryssl/variables.sh
-sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-sudo yum install -y ddclient
+sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+sudo dnf install -y ddclient
 
 base_dir="/aws-foundry-ssl/setup/namecheap"
 

@@ -39,7 +39,7 @@ This only needs to be done _once_, no matter how many times you redeploy.
 
 ### AWS Setup
 
-**Note:** This script currently only supports your _default VPC_, which should have been created automatically when you first signed up for your AWS acccount.
+**Note:** This script currently only supports your _default VPC_, which should have been created automatically when you first signed up for your AWS account.
 
 If you want to use IPv6, see [the IPv6 docs](docs/IPv6.md) for how to configure your default VPC.
 
@@ -49,7 +49,6 @@ If you want to use IPv6, see [the IPv6 docs](docs/IPv6.md) for how to configure 
   - Upload the `/cloudformation/Foundry_Deployment.yaml` file from this project
   - Fill in and check _all_ the details. I've tried to provide sensible defaults. At a minimum if you leave the defaults, the ones that need to be filled in are:
     - The link for downloading Foundry
-    - An admin user password (for IAM)
     - Your domain name and TLD eg. `mydomain.com`
       - **Important:** Do _not_ include `www` or any other sub-domain prefix
     - Your email address for LetsEncrypt TLS (https) certificate issuance

@@ -17,7 +17,7 @@ source /foundryssl/variables_tmp.sh
 set -x
 
 log "===== 1. INSTALLING DEPENDENCIES ====="
-curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
+curl -fsSL https://rpm.nodesource.com/setup_22.x | bash -
 dnf install -y nodejs
 dnf install -y openssl-devel
 dnf install -y amazon-cloudwatch-agent

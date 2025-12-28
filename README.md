@@ -4,9 +4,9 @@ This is a fork of the [**Foundry CF deploy script**](https://github.com/cat-box/
 
 **New Things**
 
-- Supports Foundry 11/12+
+- Supports Foundry 13+
 - Amazon Linux 2023 on Graviton EC2s
-- Node 20.x
+- Node 22.x
 - [IPv6 support](docs/IPv6.md)
 
 Note this is just something being done in my spare time and for fun/interest. If you have any contributions, they're welcome. Please note that I'm only focusing on AWS as the supported hosting service.

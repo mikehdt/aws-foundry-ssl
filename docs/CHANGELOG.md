@@ -2,6 +2,7 @@
 
 ### TODO
 
+- Investigate why Foundry didn't restart after a version upgrade (502 Gateway Error, fixed by restarting Foundry manually)
 - Cost management tagging
 - Custom VPC support with fallback to default VPC
 

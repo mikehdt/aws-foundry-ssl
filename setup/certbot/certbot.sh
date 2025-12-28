@@ -39,6 +39,6 @@ else
     fi
 fi
 
-sudo sed -i 's/#http2 on;/http2 on;/g' /etc/nginx/conf.d/foundryvtt.conf
+sed -i 's/#http2 on;/http2 on;/g' /etc/nginx/conf.d/foundryvtt.conf
 
 systemctl restart nginx

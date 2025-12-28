@@ -18,4 +18,4 @@ find /foundrydata -type d -exec chmod 775 {} +
 echo "Fixing file permission within /foundrydata..."
 find /foundrydata -type f -exec chmod 664 {} +
 
-echo "Done! If Foundry doesn't see the new files, run the restart-foundry.sh script."
+echo "Done! If Foundry doesn't see the new files, run the restart_foundry.sh script."

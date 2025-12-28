@@ -5,7 +5,7 @@
 #--------------------------------------------------------
 
 if [[ "${EUID}" -ne 0 ]]; then
-    echo "Please run this script as root (sudo ./restart_foundry.sh)"
+    echo "Please run this script as root (sudo ./kernel_updates.sh)"
     exit 1
 fi
 
@@ -73,13 +73,13 @@ if [[ $mode == "enable" ]]; then
         exit 0
     fi
 
-    sudo dnf install -y kpatch-dnf
-    sudo dnf kernel-livepatch -y auto
+    dnf install -y kpatch-dnf
+    dnf kernel-livepatch -y auto
 
-    sudo dnf install -y kpatch-runtime
-    sudo dnf update kpatch-runtime
+    dnf install -y kpatch-runtime
+    dnf update kpatch-runtime
 
-    sudo systemctl enable --now kpatch.service
+    systemctl enable --now kpatch.service
 
     echo "Kernel patching service enabled."
     exit 0
@@ -91,19 +91,19 @@ if [[ $mode == "disable" ]]; then
         exit 0
     fi
 
-    sudo dnf kernel-livepatch manual
-    sudo systemctl disable --now kpatch.service
+    dnf kernel-livepatch manual
+    systemctl disable --now kpatch.service
 
-    sudo dnf remove -y kpatch-dnf
-    sudo dnf remove -y kpatch-runtime
-    sudo dnf remove -y kernel-livepatch
+    dnf remove -y kpatch-dnf
+    dnf remove -y kpatch-runtime
+    dnf remove -y kernel-livepatch
 
     echo "Kernel patching service disabled."
     exit 0
 fi
 
 if [[ $mode == "now" ]]; then
-    sudo dnf update --security
+    dnf update --security
 
     echo "Available security updates applied."
     exit 0

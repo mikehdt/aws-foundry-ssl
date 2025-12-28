@@ -4,4 +4,4 @@ Documentation=https://certbot.eff.org/docs
 
 [Service]
 Type=oneshot
-ExecStart=sudo bash /foundrycron/certbot.sh
+ExecStart=/bin/bash /foundrycron/certbot.sh

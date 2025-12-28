@@ -7,8 +7,6 @@ Metadata:
           default: Foundry Configuration
         Parameters:
           - FoundryDownloadLink
-          - AdminUserName
-          - AdminUserPW
       - Label:
           default: Domain Configuration
         Parameters:
@@ -42,17 +40,6 @@ Parameters:
     Type: String
     Description: Where to download Foundry. Can be a Patreon link, a publicly shared Google Drive link, or a custom hosted link. Timed Foundry links are possible but not recommended.
     AllowedPattern: .+
-  AdminUserName:
-    Type: String
-    Description: Username for the Foundry IAM user. MUST be unique within your account.
-    AllowedPattern: "[A-Za-z0-9]+"
-    Default: FoundryAdmin
-  AdminUserPW:
-    Type: String
-    Description: "Minimum of 8 characters, maximum of 128 characters. Includes at least one of each: uppercase letter, lowercase letter, number, symbol."
-    ConstraintDescription: "8 - 128 characters long. Includes at least one of each: uppercase letter, lowercase letter, number, symbol."
-    AllowedPattern: .{8,128}
-    NoEcho: "True"
   FullyQualifiedDomainName:
     Type: String
     Description: Your domain name eg. `mydomain.com`. Do NOT include subdomains ie. no `www`!
@@ -118,12 +105,14 @@ Parameters:
     Type: String
     Description: Will allow TCP port 22 (SSH) Inbound access for the given IPv4 range. If entering, you MUST specify a valid CIDR range. For a single IPv4 IP use /32. You likely want to use your public IP (https://www.whatsmyip.org/). eg. 123.45.67.89/32. If you leave this blank, you can always set it later in the EC2 instance's Security Group > Inbound rules.
     Default: ""
-    ConstraintDescription: Must be a valid IPv4/CIDR range.
+    AllowedPattern: ^$|^(\d{1,3}\.){3}\d{1,3}/\d{1,2}$
+    ConstraintDescription: Must be a valid IPv4/CIDR range (e.g., 123.45.67.89/32) or leave empty.
   SshAccessIPv6:
     Type: String
     Description: Will allow TCP port 22 (SSH) Inbound access for the given IPv6 range. If entering, you MUST specify a valid CIDR range. For a single IPv6 IP use /128. You likely want to use your public IP (https://www.whatsmyip.org/). eg. 1234::5678/128. If you leave this blank, you can always set it later in the EC2 instance's Security Group > Inbound rules.
     Default: ""
-    ConstraintDescription: Must be a valid IPv6/CIDR range.
+    AllowedPattern: ^$|^([0-9a-fA-F]{0,4}:){2,7}[0-9a-fA-F]{0,4}/\d{1,3}$
+    ConstraintDescription: Must be a valid IPv6/CIDR range (e.g., 2001:db8::1/128) or leave empty.
   UseExistingS3Bucket:
     Type: String
     Description: If you have an existing S3 bucket set up for Foundry, set this to True. The bucket must have a public access policy set. If you don't have a bucket set up, one will be created for you with the name specified next.
@@ -133,9 +122,9 @@ Parameters:
     Default: "False"
   S3BucketName:
     Type: String
-    Description: Name for S3 bucket that will be created or used. This must be globally unique across all of AWS. Must be all lowercase letters or numbers, no spaces, and no symbols expect dash (-). A good bucket name could be eg. foundry-mydomain-com
+    Description: Name for S3 bucket that will be created or used. This must be globally unique across all of AWS. Must be all lowercase letters or numbers, no spaces, and no symbols except dash (-). A good bucket name could be eg. foundry-mydomain-com
     ConstraintDescription: Must be all lowercase letters, numbers or a dash (-). No spaces or other symbols.
-    AllowedPattern: ^[a-z|0-9]+([-|a-z|0-9]+)*[a-z|0-9]$
+    AllowedPattern: ^[a-z0-9]+(-[a-z0-9]+)*$
   TakeSnapshots:
     Type: String
     Description: Select True if you want to take backup snapshots of your instance. This is recommended but has a (minimal) cost to store the snapshots. Five rolling snapshots are retained by default. See https://aws.amazon.com/ebs/pricing/
@@ -191,7 +180,7 @@ Resources:
           FromPort: 30000
           ToPort: 30000
           CidrIp: 0.0.0.0/0
-  SecurityGroupIngressVoiceIPv4:
+  SecurityGroupIngressHttpIPv4:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !GetAtt FoundryServerSG.GroupId
@@ -199,7 +188,7 @@ Resources:
       FromPort: 80
       IpProtocol: tcp
       ToPort: 80
-  SecurityGroupIngressVoiceIPv6:
+  SecurityGroupIngressHttpIPv6:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !GetAtt FoundryServerSG.GroupId
@@ -223,7 +212,7 @@ Resources:
       FromPort: 49152
       IpProtocol: tcp
       ToPort: 65535
-  SecurityGroupIngressHttpIPv4:
+  SecurityGroupIngressTurnIPv4:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !GetAtt FoundryServerSG.GroupId
@@ -231,7 +220,7 @@ Resources:
       FromPort: 33478
       IpProtocol: tcp
       ToPort: 33478
-  SecurityGroupIngressHttpIPv6:
+  SecurityGroupIngressTurnIPv6:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !GetAtt FoundryServerSG.GroupId
@@ -320,14 +309,6 @@ Resources:
             Effect: Allow
             Principal: "*"
             Resource: !Sub arn:aws:s3:::${S3BucketName}/*
-  AdminUser:
-    Type: AWS::IAM::User
-    Properties:
-      LoginProfile:
-        Password: !Ref AdminUserPW
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AdministratorAccess
-      UserName: !Ref AdminUserName
   UserKey:
     Type: AWS::IAM::AccessKey
     Properties:
@@ -474,13 +455,28 @@ Resources:
     Type: AWS::EC2::EIP
     Properties:
       InstanceId: !Ref FoundryServer
+  DLMRole:
+    Condition: CreateSnapshots
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - dlm.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSDataLifecycleManagerServiceRole
   SnapshotPolicy:
     Condition: CreateSnapshots
     Type: AWS::DLM::LifecyclePolicy
     Properties:
       State: ENABLED
       Description: Foundry Server snapshot policy
-      ExecutionRoleArn: !GetAtt InstanceRole.Arn
+      ExecutionRoleArn: !GetAtt DLMRole.Arn
       PolicyDetails:
         PolicyType: EBS_SNAPSHOT_MANAGEMENT
         ResourceTypes:
@@ -503,3 +499,19 @@ Resources:
               RetainRule:
                 Count: 5
               CopyTags: true
+Outputs:
+  FoundryURL:
+    Description: URL to access your Foundry VTT instance
+    Value: !Sub https://${SubdomainName}.${FullyQualifiedDomainName}
+  InstancePublicIP:
+    Description: Public IP address of the Foundry server
+    Value: !If
+      - CreateEIP
+      - !Ref InstanceEIP
+      - !GetAtt FoundryServer.PublicIp
+  InstanceId:
+    Description: EC2 Instance ID
+    Value: !Ref FoundryServer
+  S3BucketName:
+    Description: S3 bucket used for Foundry assets
+    Value: !Ref S3BucketName

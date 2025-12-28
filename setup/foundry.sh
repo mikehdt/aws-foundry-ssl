@@ -93,19 +93,26 @@ systemctl enable --now foundry
 F_DIR='/foundrydata/Config/'
 echo "Start time: $(date +%s)"
 
+edit_retry=0
 while (( edit_retry < 45 )); do
     if [[ -d $F_DIR ]]; then
         echo "Directory found time: $(date +%s)"
         cp /aws-foundry-ssl/setup/foundry/options.json /foundrydata/Config/options.json
         cp /aws-foundry-ssl/setup/foundry/aws-s3.json /foundrydata/Config/aws-s3.json
+
+        # Disable command tracing while handling secrets
+        set +x
+        echo "Configuring AWS S3 credentials..."
         sed -i "s|ACCESSKEYIDHERE|${access_key_id}|g" /foundrydata/Config/aws-s3.json
         sed -i "s|SECRETACCESSKEYHERE|${secret_access_key}|g" /foundrydata/Config/aws-s3.json
         sed -i "s|REGIONHERE|${region}|g" /foundrydata/Config/aws-s3.json
+        set -x
+
         sed -i 's|"awsConfig":.*|"awsConfig": "/foundrydata/Config/aws-s3.json",|g' /foundrydata/Config/options.json
 
         break
     else
-        echo  echo "Directory not found time: $(date +%s)"
+        echo "Directory not found time: $(date +%s)"
         (( edit_retry++ ))
         sleep 1s
     fi

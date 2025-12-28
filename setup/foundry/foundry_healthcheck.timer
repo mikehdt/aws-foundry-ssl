@@ -1,0 +1,10 @@
+[Unit]
+Description=Run Foundry health check every 5 minutes
+
+[Timer]
+Unit=foundry_healthcheck.service
+OnBootSec=2min
+OnUnitActiveSec=5min
+
+[Install]
+WantedBy=timers.target

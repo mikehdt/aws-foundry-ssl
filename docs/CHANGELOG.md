@@ -2,8 +2,6 @@
 
 ### TODO
 
-- Investigate why Foundry didn't restart after a version upgrade (502 Gateway Error, fixed by restarting Foundry manually)
-- Cost management tagging
 - Custom VPC support with fallback to default VPC
 
 ### v3.0.0-alpha - Security and logging improvements
@@ -14,6 +12,8 @@
 - New: Timestamped logging in setup scripts for better debugging
 - New: CloudFormation Outputs section with Foundry URL, instance IP, and S3 bucket name
 - New: Added `AllowedPattern` validation for SSH IPv4/IPv6 CIDR inputs
+- New: Foundry health check service that auto-restarts Foundry if unresponsive (fixes V11+ 502 errors after in-place updates)
+- New: Cost management tags (`Application`, `StackName`) on all AWS resources for billing visibility
 - Security: Secrets (AWS access keys) are no longer leaked in setup logs
 - Fix: Proper DLM (Data Lifecycle Manager) role for EBS snapshots; Previously used the EC2 instance role incorrectly
 - Fix: S3 bucket name regex pattern now correctly validates (removed errant pipe characters)

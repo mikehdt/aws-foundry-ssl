@@ -1,0 +1,6 @@
+[Unit]
+Description=Foundry VTT Health Check
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /foundrycron/foundry_healthcheck.sh

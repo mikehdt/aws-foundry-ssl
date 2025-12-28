@@ -180,6 +180,13 @@ Resources:
           FromPort: 30000
           ToPort: 30000
           CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-SG"
+        - Key: Application
+          Value: FoundryVTT
+        - Key: StackName
+          Value: !Ref AWS::StackName
   SecurityGroupIngressHttpIPv4:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -296,6 +303,13 @@ Resources:
               - POST
               - HEAD
             MaxAge: 3000
+      Tags:
+        - Key: Name
+          Value: !Ref S3BucketName
+        - Key: Application
+          Value: FoundryVTT
+        - Key: StackName
+          Value: !Ref AWS::StackName
   FoundryBucketPolicy:
     Condition: NoExistingS3
     Type: AWS::S3::BucketPolicy
@@ -317,6 +331,11 @@ Resources:
   FoundryUser:
     Type: AWS::IAM::User
     Properties:
+      Tags:
+        - Key: Application
+          Value: FoundryVTT
+        - Key: StackName
+          Value: !Ref AWS::StackName
       Policies:
         - PolicyName: S3Foundry
           PolicyDocument:
@@ -404,12 +423,16 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${AWS::StackName}-Server"
+        - Key: Application
+          Value: FoundryVTT
+        - Key: StackName
+          Value: !Ref AWS::StackName
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -x
           AWS_INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
           ROOT_VOLUME_IDS=$(aws ec2 describe-instances --region ${AWS::Region} --instance-id ${!AWS_INSTANCE_ID} --output text --query Reservations[0].Instances[0].BlockDeviceMappings[0].Ebs.VolumeId)
-          aws ec2 create-tags --resources ${!ROOT_VOLUME_IDS} --region ${AWS::Region} --tags Key=Snapshot,Value=true
+          aws ec2 create-tags --resources ${!ROOT_VOLUME_IDS} --region ${AWS::Region} --tags Key=Snapshot,Value=true Key=Name,Value=${AWS::StackName}-Volume Key=Application,Value=FoundryVTT Key=StackName,Value=${AWS::StackName}
           # Install the files and packages from the metadata
           /opt/aws/bin/cfn-init -v --resource FoundryServer --stack ${AWS::StackName} --region ${AWS::Region}
           # Signal the status from cfn-init
@@ -417,6 +440,11 @@ Resources:
   InstanceRole:
     Type: AWS::IAM::Role
     Properties:
+      Tags:
+        - Key: Application
+          Value: FoundryVTT
+        - Key: StackName
+          Value: !Ref AWS::StackName
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -455,10 +483,22 @@ Resources:
     Type: AWS::EC2::EIP
     Properties:
       InstanceId: !Ref FoundryServer
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-EIP"
+        - Key: Application
+          Value: FoundryVTT
+        - Key: StackName
+          Value: !Ref AWS::StackName
   DLMRole:
     Condition: CreateSnapshots
     Type: AWS::IAM::Role
     Properties:
+      Tags:
+        - Key: Application
+          Value: FoundryVTT
+        - Key: StackName
+          Value: !Ref AWS::StackName
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
@@ -477,6 +517,11 @@ Resources:
       State: ENABLED
       Description: Foundry Server snapshot policy
       ExecutionRoleArn: !GetAtt DLMRole.Arn
+      Tags:
+        - Key: Application
+          Value: FoundryVTT
+        - Key: StackName
+          Value: !Ref AWS::StackName
       PolicyDetails:
         PolicyType: EBS_SNAPSHOT_MANAGEMENT
         ResourceTypes:

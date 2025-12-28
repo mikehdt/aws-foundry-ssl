@@ -2,9 +2,27 @@
 
 ### TODO
 
-- Find a way to make LetsEncrypt logs nicer (instead of one terminal line per entry?)
 - Cost management tagging
-- Log IP updates to CloudWatch
+- Custom VPC support with fallback to default VPC
+
+### v3.0.0-alpha - Security and logging improvements
+
+- (breaking) Removed: IAM Admin User is no longer created; It was unrelated to Foundry's operation and a security concern
+- New: Setup log (`/tmp/foundry-setup.log`) now streams to CloudWatch for real-time deployment monitoring
+- New: Nginx access log now streams to CloudWatch
+- New: Timestamped logging in setup scripts for better debugging
+- New: CloudFormation Outputs section with Foundry URL, instance IP, and S3 bucket name
+- New: Added `AllowedPattern` validation for SSH IPv4/IPv6 CIDR inputs
+- Security: Secrets (AWS access keys) are no longer leaked in setup logs
+- Fix: Proper DLM (Data Lifecycle Manager) role for EBS snapshots; Previously used the EC2 instance role incorrectly
+- Fix: S3 bucket name regex pattern now correctly validates (removed errant pipe characters)
+- Fix: Security group resource names now match their actual purpose (HTTP, HTTPS, TURN, Voice)
+- Fix: Removed unnecessary `sudo` calls throughout scripts (already running as root)
+- Fix: Uninitialised `edit_retry` variable in foundry.sh
+- Fix: Double `echo` typo in foundry.sh
+- Fix: Incorrect script name references in utility scripts
+- Uplift: Renamed CloudWatch log groups for consistency (`foundry-*` prefix)
+- Docs: Fixed typos and removed outdated IAM Admin User references
 
 ### v2.1.0 - Upgrade compatibility
 

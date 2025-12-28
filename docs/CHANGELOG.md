@@ -23,6 +23,7 @@
 - Fix: Double `echo` typo in foundry.sh
 - Fix: Incorrect script name references in utility scripts
 - Uplift: Renamed CloudWatch log groups for consistency (`foundry-*` prefix)
+- Uplift: Amazon Linux 2023 kernel 6.12
 - Docs: Fixed typos and removed outdated IAM Admin User references
 
 ### v2.1.0 - Upgrade compatibility

@@ -93,7 +93,7 @@ Parameters:
   InstanceAmiId:
     Description: The image name for the EC2 instance (only change if you know what you're doing)
     Type: "AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>"
-    Default: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.1-arm64"
+    Default: "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-6.12-arm64"
   UseFixedIP:
     Type: String
     Description: Allows you to have a dedicated public IP for your instance. This prevents the IP from changing everytime you shutdown the instance. EIPs are an additional cost. Note from 2024 AWS will charge for all IPv4 address use, both dynamic and fixed.

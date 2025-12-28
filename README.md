@@ -74,19 +74,20 @@ You can always manually add or update SSH access later in `EC2 / Security Groups
 
 If you don't have a need for your Foundry server to run 24/7, **AWS Systems Manager** lets you configure a simple schedule to start and stop your EC2 Foundry instance and save on hosting costs.
 
-1. From the AWS Console, navigate to `Systems Manager`
-1. Then,
+1. From the AWS Console, navigate to `Systems Manager` and then look under the Change Management Tools heading
+2. Then,
+
    - if this is your first time using System Manager, choose `Quick Setup`, or
    - if you already have other services configured in Systems Manager, choose `Quick Setup` and then click the `Create` button
 
-1. Choose `Resource Scheduler`
+3. Choose `Resource Scheduler`
 
    - Enter a tag name of `Name` with a value of `[the Foundry CloudFormation stack name]-Server`
      - You can find the server name in `EC2 / Instances` if you're unsure
    - Choose which days and what times on those days you want the server to be active
    - Choose `Current Account` and `Current Region` as targets unless your needs differ
 
-1. Create the schedule
+4. Create the schedule
 
 Once it's successfully provisioned, the next time it ticks over a trigger time the Foundry EC2 server will be started or stopped as appropriate, saving you from paying for time that you aren't using the server.
 

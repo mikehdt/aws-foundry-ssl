@@ -6,6 +6,7 @@
 
 ### v3.0.0-alpha - Security and logging improvements
 
+- (breaking) Uplift: Updated Foundry service paths for V13+ zip structure (no longer uses `resources/app/` subdirectory)
 - (breaking) Removed: IAM Admin User is no longer created; It was unrelated to Foundry's operation and a security concern
 - New: Setup log (`/tmp/foundry-setup.log`) now streams to CloudWatch for real-time deployment monitoring
 - New: Nginx access log now streams to CloudWatch

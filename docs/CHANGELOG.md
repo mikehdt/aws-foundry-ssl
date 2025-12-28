@@ -24,7 +24,7 @@
 - Fix: Double `echo` typo in foundry.sh
 - Fix: Incorrect script name references in utility scripts
 - Uplift: Renamed CloudWatch log groups for consistency (`foundry-*` prefix)
-- Uplift: Node.js 22 LTS
+- Uplift: Node.js 24 LTS
 - Uplift: Amazon Linux 2023 kernel 6.12
 - Docs: Fixed typos and removed outdated IAM Admin User references
 

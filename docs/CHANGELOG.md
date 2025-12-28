@@ -4,7 +4,7 @@
 
 - Custom VPC support with fallback to default VPC
 
-### v3.0.0-alpha - Security and logging improvements
+### v3.0.0 - Security and logging improvements
 
 - (breaking) Uplift: Updated Foundry service paths for V13+ zip structure (no longer uses `resources/app/` subdirectory)
 - (breaking) Removed: IAM Admin User is no longer created; It was unrelated to Foundry's operation and a security concern

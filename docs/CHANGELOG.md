@@ -9,7 +9,7 @@
 - (breaking) Uplift: Updated Foundry service paths for V13+ zip structure (no longer uses `resources/app/` subdirectory)
 - (breaking) Removed: IAM Admin User is no longer created; It was unrelated to Foundry's operation and a security concern
 - New: Setup log (`/tmp/foundry-setup.log`) now streams to CloudWatch for real-time deployment monitoring
-- New: Nginx access log now streams to CloudWatch
+- New: Nginx error log now streams to CloudWatch
 - New: Timestamped logging in setup scripts for better debugging
 - New: CloudFormation Outputs section with Foundry URL, instance IP, and S3 bucket name
 - New: Added `AllowedPattern` validation for SSH IPv4/IPv6 CIDR inputs

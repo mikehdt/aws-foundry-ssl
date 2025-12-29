@@ -6,24 +6,27 @@ First, log in to the Foundry admin interface. From the Foundry version update sc
 
 Then, make sure to back up all the Foundry data from your existing EC2 instance. The easiest way to do this is via SCP, using the SSH keypair created for the EC2.
 
-Once you've downloaded all your foundry worlds and user data, make a note of all the add-ons you use as you'll likely need to reinstall them manually. Many add-ons change repositories, dependencies, or simply aren't compatible and may no longer be maintained. Once you're sure you've got everything, manually stop the EC2 server.
+Once you've downloaded all your foundry worlds and user data, make a note of all the add-ons you use as you'll likely need to reinstall them manually. Many add-ons change repositories, dependencies, or simply aren't compatible and may no longer be maintained. Once you're sure you've got everything, manually stop the EC2 server so that it doesn't try to take over the Route53 entry while your new EC2 is running.
 
 Then, deploy a new CloudFormation stack with the new version of Foundry.
 
 Once the new stack is deployed, you'll need to:
 
 - SSH into the server and set the permissions so you can upload via SCP with `sudo chmod -R 775 /foundrydata/Data`
+  - If this is being fussy, you may need to temporarily change ownership of the `/foundrydata` folder to `ec2-user:root` via `chown -R ec2-user:root /foundrydata` - make sure to change this back to `foundry:foundry` once you're done
 - Then, re-upload your world data to this folder via SCP
 - Once complete, run `sudo /aws-foundry-ssl/utils/fix_folder_permissions.sh`
 - Restart the Foundry server with `sudo /aws-foundry-ssl/utils/restart_foundry.sh`
 - Open up your browser and navigate to your new Foundry address
-- Enter your license key into Foundry, set your admin password, and then _manually_ reinstall your plugins
+- Enter your licence key into Foundry, set your admin password, reload Foundry, and then _manually_ reinstall your plugins
 - Start your new world, and let it migrate if needed
 
 At any point if something goes awry, you can always stop the new EC2 and start the old EC2 to test.
 
 Once up and running, Foundry should prompt you to upgrade the save format if it's changed in any way. Note that this is an irreversible process, so keep a back-up of the old version at least for a little while!
 
-When you're happy that the new server and Foundry version is working as you wish, you can tear down the _old_ CloudFormation stack. Make sure to update the scheduler if you're using it.
+When you're happy that the new server and Foundry version is working as you wish, you can tear down the _old_ CloudFormation stack.
+
+Make sure to update the resource scheduler (to start/stop the new EC2 on your selected schedule) if you're using it.
 
 _Note: You can do a major version upgrade in-place on your current server, but that's at your own initiative as it can be risky._

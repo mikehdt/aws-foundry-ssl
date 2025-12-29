@@ -1,6 +1,6 @@
 # AWS Foundry VTT CloudFormation Deployment with TLS Encryption
 
-This is a fork of the [**Foundry CF deploy script**](https://github.com/cat-box/aws-foundry-ssl) by Lupert and Cat.
+This is a fork of the [**Foundry CF deploy script**](https://github.com/cat-box/aws-foundry-ssl) by Lupert and Cat, though it's diverged quite significantly.
 
 **New Things**
 
@@ -13,7 +13,7 @@ Note this is just something being done in my spare time and for fun/interest. If
 
 ## Installation
 
-You'll need some technical expertise and basic familiarity with AWS to get this running. It's not quite click-ops, but it's close. Some parts do require some click-ops once.
+You'll need some technical expertise and basic familiarity with AWS to get this running. It's not _quite_ click-ops, but it's close. Some parts do require some one-off click-ops, such as generating the EC2 security pair.
 
 You can also refer to the original repo's wiki, but the gist is:
 
@@ -35,7 +35,7 @@ This only needs to be done _once_, no matter how many times you redeploy.
 - Create an SSH key in **EC2**, under `EC2 / Key Pairs`
   - Keep the downloaded private keypair (PEM or PPK) file safe, you'll need it for [SSH / SCP access](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/connect-to-linux-instance.html) to the EC2 server instance
   - If you tear down and redeploy the CloudFormation stack you can reuse the same SSH key
-  - Consider rotating these keys regularly as a good security practise
+  - Consider rotating these keys regularly as a good security practice
 
 ### AWS Setup
 
@@ -72,7 +72,7 @@ You can always manually add or update SSH access later in `EC2 / Security Groups
 
 ## Running the Server on a Schedule
 
-If you don't have a need for your Foundry server to run 24/7, **AWS Systems Manager** lets you configure a simple schedule to start and stop your EC2 Foundry instance and save on hosting costs.
+If you don't have a need for your Foundry server to run 24/7, **AWS Systems Manager** lets you configure a simple schedule to start and stop your EC2 Foundry instance and save on hosting costs. Note: AWS change the interface for this semi-regularly, but hopefully the concepts should still hold.
 
 1. From the AWS Console, navigate to `Systems Manager` and then look under the Change Management Tools heading
 2. Then,
@@ -110,11 +110,12 @@ see [Upgrading](docs/UPGRADING.md)
 As long as you can get as far as the EC2 being spun up, then:
 
 - If you encounter a creation error, try setting CloudFormation to _preserve_ resources instead of _rollback_ so you can check the troublesome resources
-- Disable LetsEncrypt certificate requests (`UseLetsEncryptTLS` set to `False`), until you're happy that it's working to avoid running into the certificate issuance limit
+- Disable LetsEncrypt certificate requests (`UseLetsEncryptTLS` set to `False`), until you're happy that the stack build will work, to avoid running into the certificate issuance limit
 - Add your IP to the Inbound rules of the created Security Group (if you didn't already during the CloudFormation config)
 - Grab the EC2's IP from the EC2 web console details
 - Open up PuTTy or similar, connect to the IP using the SSH keypair (I'd recommend to only accept the key _once_, rather than accept _always_, as you may end up destroying this instance)
 - Check the setup logs
+  - These can be found in CloudWatch under `foundry-setup`. Or if you SSH into the EC2,
   - `sudo tail -f /tmp/foundry-setup.log` if setup scripts are still running, or
   - `sudo cat /tmp/foundry-setup.log | less` if setup scripts have finished running
 

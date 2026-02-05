@@ -20,6 +20,7 @@ ln -s /opt/certbot/bin/certbot /usr/bin/certbot
 
 # Set up autorenew SSL certs
 cp /aws-foundry-ssl/setup/certbot/certbot.sh /foundrycron/certbot.sh
+chmod +x /foundrycron/certbot.sh
 cp /aws-foundry-ssl/setup/certbot/certbot.service /etc/systemd/system/certbot.service
 cp /aws-foundry-ssl/setup/certbot/certbot_start.timer /etc/systemd/system/certbot_start.timer
 cp /aws-foundry-ssl/setup/certbot/certbot_renew.timer /etc/systemd/system/certbot_renew.timer

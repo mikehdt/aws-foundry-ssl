@@ -17,6 +17,7 @@ echo "DNS Zone ID: ${zone_id}"
 grep -q "^zone_id=" /foundryssl/variables.sh && sed "s/^zone_id=.*/zone_id=${zone_id}/" -i /foundryssl/variables.sh || sed "$ a\zone_id=${zone_id}" -i /foundryssl/variables.sh
 
 cp /aws-foundry-ssl/setup/aws/hosted_zone_ip.sh /foundrycron/hosted_zone_ip.sh
+chmod +x /foundrycron/hosted_zone_ip.sh
 cp /aws-foundry-ssl/setup/aws/hosted_zone_ip.service /etc/systemd/system/hosted_zone_ip.service
 cp /aws-foundry-ssl/setup/aws/hosted_zone_ip.timer /etc/systemd/system/hosted_zone_ip.timer
 

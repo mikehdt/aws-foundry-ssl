@@ -1,9 +1,11 @@
 [Unit]
 Description=Poll to set dynamic DNS in case it changes
+After=network-online.target
+Wants=network-online.target
 
 [Timer]
 Unit=hosted_zone_ip.service
-OnBootSec=0s
+OnBootSec=60s
 OnUnitActiveSec=24h
 
 [Install]

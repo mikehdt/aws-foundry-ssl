@@ -88,6 +88,7 @@ chmod 644 /etc/systemd/system/foundry.service
 
 # Set up health check to restart Foundry if unresponsive (addresses V11+ update behaviour)
 cp /aws-foundry-ssl/setup/foundry/foundry_healthcheck.sh /foundrycron/foundry_healthcheck.sh
+chmod +x /foundrycron/foundry_healthcheck.sh
 cp /aws-foundry-ssl/setup/foundry/foundry_healthcheck.service /etc/systemd/system/foundry_healthcheck.service
 cp /aws-foundry-ssl/setup/foundry/foundry_healthcheck.timer /etc/systemd/system/foundry_healthcheck.timer
 

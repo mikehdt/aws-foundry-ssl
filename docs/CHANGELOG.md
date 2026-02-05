@@ -4,6 +4,12 @@
 
 - Custom VPC support with fallback to default VPC
 
+### v3.0.1 - Dynamic DNS fix
+
+- Fix: Route53 dynamic DNS script now validates IP addresses before updating records (prevents error messages being set as IPs if network isn't ready at boot)
+- Fix: Dynamic DNS timer now waits 60 seconds after boot and requires network-online target (was running before network was ready)
+- Fix: Added missing `chmod +x` for scripts copied to `/foundrycron/` (`hosted_zone_ip.sh`, `certbot.sh`, `foundry_healthcheck.sh`)
+
 ### v3.0.0 - Security and logging improvements
 
 - (breaking) Uplift: Updated Foundry service paths for V13+ zip structure (no longer uses `resources/app/` subdirectory)

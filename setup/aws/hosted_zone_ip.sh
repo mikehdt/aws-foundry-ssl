@@ -31,8 +31,24 @@ updateRecordset () {
 
 # Attempt to retrieve public IPv4 and IPv6 (can use +tries=x +time=y if the timeout is too long)
 echo "Querying public IP addresses for the EC2..."
-ec2_ipv4="$(dig -4 +short txt ch whoami.cloudflare @1.0.0.1 | tr -d '"')"
-ec2_ipv6="$(dig -6 +short txt ch whoami.cloudflare @2606:4700:4700::1001 | tr -d '"')"
+ec2_ipv4_raw="$(dig -4 +short txt ch whoami.cloudflare @1.0.0.1 2>/dev/null | tr -d '"')"
+ec2_ipv6_raw="$(dig -6 +short txt ch whoami.cloudflare @2606:4700:4700::1001 2>/dev/null | tr -d '"')"
+
+# Validate IPv4 - must match x.x.x.x pattern
+if [[ "$ec2_ipv4_raw" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    ec2_ipv4="$ec2_ipv4_raw"
+else
+    echo "Warning: Failed to retrieve valid IPv4 address (got: $ec2_ipv4_raw)"
+    ec2_ipv4=""
+fi
+
+# Validate IPv6 - must contain colons and hex characters only
+if [[ "$ec2_ipv6_raw" =~ ^[0-9a-fA-F:]+$ ]]; then
+    ec2_ipv6="$ec2_ipv6_raw"
+else
+    echo "Warning: Failed to retrieve valid IPv6 address (got: $ec2_ipv6_raw)"
+    ec2_ipv6=""
+fi
 
 # Get IP for subdomain record
 recordset_subdomain=`aws route53 list-resource-record-sets --hosted-zone-id ${zone_id} | jq ".ResourceRecordSets[] | select(.Name==\"${subdomain}.${fqdn}.\")"`
